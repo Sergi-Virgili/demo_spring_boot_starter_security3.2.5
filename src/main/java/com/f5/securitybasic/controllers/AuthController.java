@@ -13,7 +13,7 @@ public class AuthController {
 
     @GetMapping("/closed")
     public String closedEndpoint() {
-        return "Hello ypu are in the Restricted Area";
+        return "Hello you are in the Restricted Area";
     }
 
 }

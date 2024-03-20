@@ -2,12 +2,15 @@ package com.f5.securitybasic.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +28,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.build();
+        return httpSecurity
+                .csrf(csrf-> csrf.disable())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(http ->
+                        {
+                            http.requestMatchers(HttpMethod.GET, "/open").permitAll();
+                            http.requestMatchers(HttpMethod.GET, "/closed").hasRole("ADMIN");
+                            http.anyRequest().denyAll();
+                        })
+                .build();
     }
 
     @Bean
@@ -51,10 +64,10 @@ public class SecurityConfig {
         Set<UserDetails> userDetails = new HashSet<>();
 
         userDetails.add(
-                User.withUsername("user1").password("secret").roles("ADMIN").authorities("READ", "CREATE").build());
+                User.withUsername("user1").password("secret").roles("USER").authorities("ROLE_USER", "READ").build());
 
         userDetails.add(
-                User.withUsername("user2").password("secret2").roles("ADMIN").authorities("READ", "CREATE").build());
+                User.withUsername("user2").password("secret2").roles("ADMIN").authorities("ROLE_ADMIN", "CREATE").build());
 
 
         return new InMemoryUserDetailsManager(userDetails);

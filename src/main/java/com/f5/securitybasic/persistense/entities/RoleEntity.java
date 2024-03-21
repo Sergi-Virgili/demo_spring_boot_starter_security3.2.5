@@ -21,7 +21,8 @@ public class RoleEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "role_name")
+    @Column(name = "role_name", unique = true)
+    @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

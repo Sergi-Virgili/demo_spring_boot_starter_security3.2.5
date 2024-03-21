@@ -1,0 +1,15 @@
+
+# create a postgress container
+
+version: '3.1'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: user
+      POSTGRES_DB: security_db
+    ports:
+      - "5432:5432"

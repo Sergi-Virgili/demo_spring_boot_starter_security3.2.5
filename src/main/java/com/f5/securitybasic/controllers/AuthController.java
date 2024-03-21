@@ -8,7 +8,7 @@ public class AuthController {
 
     @GetMapping("/open")
     public String openEndpoint() {
-        return "Hello in OPEN ENDPONT";
+        return "Hello in OPEN ENDPOINT";
     }
 
     @GetMapping("/closed")

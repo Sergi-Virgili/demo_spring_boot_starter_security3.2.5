@@ -1,5 +1,6 @@
 package com.f5.securitybasic.config;
 
+import com.f5.securitybasic.services.UserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,12 +12,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.HashSet;
@@ -47,10 +44,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(UserDetailServiceImpl userDetailService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService());
+        provider.setUserDetailsService(userDetailService);
         return provider;
     }
 
@@ -58,19 +55,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        Set<UserDetails> userDetails = new HashSet<>();
-
-        userDetails.add(
-                User.withUsername("user1").password("secret").roles("USER").authorities("ROLE_USER", "READ").build());
-
-        userDetails.add(
-                User.withUsername("user2").password("secret2").roles("ADMIN").authorities("ROLE_ADMIN", "CREATE").build());
-
-
-        return new InMemoryUserDetailsManager(userDetails);
-    }
-
 }

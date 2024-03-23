@@ -4,7 +4,7 @@ import com.f5.securitybasic.persistense.entities.PermissionEntity;
 import com.f5.securitybasic.persistense.entities.RoleEntity;
 import com.f5.securitybasic.persistense.entities.RoleEnum;
 import com.f5.securitybasic.persistense.entities.UserEntity;
-import com.f5.securitybasic.persistense.repositories.UserRepository;
+import com.f5.securitybasic.persistense.repositories.AuthRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.Set;
 public class DataSeeder {
 
     @Autowired
-    UserRepository userRepository;
+    AuthRepository userRepository;
 
     @PostConstruct
     public void seed() {

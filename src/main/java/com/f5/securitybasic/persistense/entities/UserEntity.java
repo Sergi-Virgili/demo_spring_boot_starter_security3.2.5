@@ -1,10 +1,7 @@
 package com.f5.securitybasic.persistense.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,12 +19,19 @@ public class UserEntity {
     private String username;
     private String password;
 
-    private boolean isEnable;
-    private boolean accountNoExpired;
-    private boolean accountNoLocked;
-    private boolean credentialNoExpired;
+
+    private boolean isEnable = true;
+    private boolean accountNoExpired = true;
+    private boolean accountNoLocked = true;
+    private boolean credentialNoExpired = true;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
+
+    public UserEntity(String username, String password, Set<RoleEntity> roles) {
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+    }
 }

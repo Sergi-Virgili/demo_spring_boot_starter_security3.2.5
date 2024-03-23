@@ -1,7 +1,7 @@
 package com.f5.securitybasic.services;
 
 import com.f5.securitybasic.persistense.entities.UserEntity;
-import com.f5.securitybasic.persistense.repositories.UserRepository;
+import com.f5.securitybasic.persistense.repositories.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,7 +17,7 @@ import java.util.Set;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    AuthRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

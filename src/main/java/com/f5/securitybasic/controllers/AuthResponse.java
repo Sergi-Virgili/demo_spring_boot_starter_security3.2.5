@@ -1,4 +1,6 @@
 package com.f5.securitybasic.controllers;
 
-public record AuthResponse(String token) {
+import java.util.List;
+
+public record AuthResponse(String token, String username, List<String> roles) {
 }

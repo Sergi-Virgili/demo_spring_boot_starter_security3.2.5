@@ -18,11 +18,14 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final RoleRepository roleRepository;
 
+    private final JWTService jwtService;
+
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(AuthRepository authRepository, RoleRepository repository, PasswordEncoder passwordEncoder) {
+    public AuthService(AuthRepository authRepository, RoleRepository repository, JWTService jwtService, PasswordEncoder passwordEncoder) {
         this.authRepository = authRepository;
         this.roleRepository = repository;
+        this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -34,9 +37,12 @@ public class AuthService {
                 );
 
         if (authRepository.findByUsername(request.username()).isPresent()) throw new UsernameExistingException("username exists");
-        authRepository.save(user);
 
-        return new AuthResponse("aqui va el toquen");
+        var createdUser = authRepository.save(user);
+
+        String token = jwtService.generate(createdUser);
+
+        return new AuthResponse(token, user.getUsername(), user.getRoles().stream().map(role -> role.getRoleEnum().name()).toList());
     }
 
 }

@@ -23,16 +23,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
-        Set<SimpleGrantedAuthority> authorityList = new HashSet<>();
+//        Set<SimpleGrantedAuthority> authorityList = new HashSet<>();
+//
+//        userEntity.getRoles().forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name()))));
+//
+//        userEntity.getRoles().stream()
+//                .flatMap(role -> role.getPermissions().stream())
+//                .forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getName())));
 
-        userEntity.getRoles().forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRoleEnum().name()))));
-
-        userEntity.getRoles().stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getName())));
-
-        return new User(userEntity.getUsername(), userEntity.getPassword(), userEntity.isEnable(), userEntity.isAccountNoExpired(),
-                userEntity.isCredentialNoExpired(), userEntity.isAccountNoLocked(), authorityList);
+        return userEntity;
 
     }
 }

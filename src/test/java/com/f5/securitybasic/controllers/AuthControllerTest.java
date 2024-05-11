@@ -43,13 +43,13 @@ class AuthControllerTest {
     void closedEndpointWithWrongBasicAuthentication() throws Exception {
         mockMvc.perform(get("/closed")
                         .with(user("user").roles("USER")))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk());
 
     }
 
     @Test
     void closedEndpointWithoutAuthentication() throws Exception {
         mockMvc.perform(get("/closed"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 }

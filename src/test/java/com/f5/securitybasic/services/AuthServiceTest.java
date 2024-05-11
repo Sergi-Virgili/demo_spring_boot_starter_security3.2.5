@@ -36,6 +36,9 @@ class AuthServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private JWTService jwtService;
+
     @InjectMocks
     private AuthService authService;
 
@@ -55,14 +58,16 @@ class AuthServiceTest {
         when(roleRepository.findByRoleEnum(RoleEnum.USER)).thenReturn(Optional.of(role));
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(authRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
     }
 
     @Test
     void register_WithValidRequest_ReturnsAuthResponse() {
-        AuthResponse response = authService.register(validRequest);
+        when(jwtService.generate(any())).thenReturn("token_jwt_mocked");
 
+        AuthResponse response = authService.register(validRequest);
         assertNotNull(response);
-        assertEquals("aqui va el toquen", response.token());
+        assertEquals("token_jwt_mocked", response.token());
 
         verify(authRepository, times(1)).save(any(UserEntity.class));
 
@@ -71,7 +76,6 @@ class AuthServiceTest {
     @Test
     void register_WithExistingUsername_ThrowsUsernameExistingException() {
         when(authRepository.findByUsername(validRequest.username())).thenReturn(Optional.of(userEntity));
-
 
         assertThrows(UsernameExistingException.class, () -> {
             authService.register(validRequest);

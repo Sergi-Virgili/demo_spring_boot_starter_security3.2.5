@@ -2,7 +2,6 @@ package com.f5.securitybasic.controllers;
 
 import com.f5.securitybasic.services.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +25,7 @@ public class AuthController {
         return "Hello in OPEN ENDPOINT";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/closed")
     public String closedEndpoint() {
         return "Hello you are in the Restricted Area";

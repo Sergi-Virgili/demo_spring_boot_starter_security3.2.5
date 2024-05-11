@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "users")
+@Table(name = "userss")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class UserEntity implements UserDetails {
     @Id
@@ -30,7 +30,7 @@ public class UserEntity implements UserDetails {
     private boolean accountNoLocked = true;
     private boolean credentialNoExpired = true;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 

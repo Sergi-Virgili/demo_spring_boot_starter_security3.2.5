@@ -10,6 +10,7 @@ import com.f5.securitybasic.persistense.repositories.RoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -45,4 +46,7 @@ public class AuthService {
         return new AuthResponse(token, user.getUsername(), user.getRoles().stream().map(role -> role.getRoleEnum().name()).toList());
     }
 
+    public Optional<UserEntity> findByUsername(String username) {
+        return authRepository.findByUsername(username);
+    }
 }
